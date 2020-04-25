@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>CLICK_HEADING</title>
+  </head>
+  <body>
+    <h1 id="heading">Поймай меня!</h1>
+    <script src="https://code.jquery.com/jquery-2.1.0.js"></script>
+    <script>
+      var direction = "right";
+      var offset = 0;
+      var intervalLength = 30;
+      var clicks = 0;
+
+      $("#heading").offset({ top: 0, left: 0 });
+
+      var moveHeading = function () {
+        if (direction === "right") {
+          $("#heading").offset({ left: offset });
+          offset++;
+          if (offset > 200) {
+            offset = 0;
+            direction = "down";
+          }
+        } else if (direction === "down") {
+          $("#heading").offset({ top: offset });
+          offset++;
+          if (offset > 200) {
+            offset = 200;
+            direction = "left";
+          }
+        } else if (direction === "left") {
+          $("#heading").offset({ left: offset });
+          offset--;
+          if (offset < 0) {
+            offset = 200;
+            direction = "up";
+          }
+        } else if (direction === "up") {
+          $("#heading").offset({ top: offset });
+          offset--;
+          if (offset < 0) {
+            offset = 0;
+            direction = "right";
+          }
+        }
+      };
+      var intervalId = setInterval(moveHeading, intervalLength);
+
+      $("#heading").click(function () {
+        clearInterval(intervalId);
+        intervalLength /= 2;
+        clicks++;
+        $("#heading").text(clicks);
+        if (clicks > 9) {
+          $("#heading").text("You Win!");
+        } else {
+          intervalId = setInterval(moveHeading, intervalLength);
+        }
+      });
+    </script>
+  </body>
+</html>
