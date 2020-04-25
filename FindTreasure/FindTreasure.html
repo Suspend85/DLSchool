@@ -84,16 +84,16 @@
         var distanceHint = getDistanceHint(distance);
         // Записываем в элемент #distance новую подсказку
         $("#distance").text(distanceHint);
-        // Если клик был достатотчно близко, поздровляем с победой
+        // Если клик был достатотчно близко, поздравляем с победой
         if (distance < 15) {
-          clicks = 0;
           alert(`Клад найден! Сделано кликов: ${clicks}`);
-          // getRandomNumber();
+          clicks = 0;
+          leastClicks = 30;
         }
         if (leastClicks == 0) {
-          clicks = 0;
           alert("КОНЕЦ ИГРЫ! ВЫ НЕ НАШЛИ КЛАД ЗА 30 КЛИКОВ!");
-          // getRandomNumber();
+          clicks = 0;
+          leastClicks = 30;
         }
       });
     </script>
