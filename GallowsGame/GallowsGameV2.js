@@ -71,9 +71,6 @@ var updateGameState = function (guess, word, answerArr) {
   return counter;
 };
 
-// var misses = function (remains) {
-//   for (let i = remains; i > 0; i--)
-// }
 var drawMan = function (misses) {
   ctx.linewidth = 4;
 
