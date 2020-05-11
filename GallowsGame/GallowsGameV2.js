@@ -46,7 +46,6 @@ var setupAnswerArray = function (word) {
 };
 
 var showPlayerProgress = function (answerArr) {
-  // С помощью alert отображает текущее состояние игры
   return alert(` ${answerArr.join(" ")}    Осталось ${remains} попыток`);
 };
 
@@ -70,7 +69,7 @@ var updateGameState = function (guess, word, answerArr) {
   remains--;
   return counter;
 };
-
+// функция рисования человечка в зависимости от количества не правильных ответов
 var drawMan = function (misses) {
   ctx.linewidth = 4;
 
@@ -105,6 +104,13 @@ var drawMan = function (misses) {
 
 var showAnswerAndCongratulatePlayer = function (answerArr) {
   // С помощью alert показывает игроку отгаданное слово и поздравляет его с победой
+  ctx.textBaseline = "top";
+  ctx.textAlign = "left";
+  ctx.fillStyle = "Black";
+  ctx.font = "20px  Courier";
+  var answerLog = answerArr.join(" ");
+  ctx.fillText(answerLog, 10, 120);
+
   alert(answerArr.join(" "));
   return alert("Было загадано слово " + word);
 };
@@ -142,9 +148,20 @@ while (remainingLetters > 0 && remains > 0) {
     // correctGuesses: количество открытых букв
     var correctGuesses = updateGameState(guess, word, answerArr);
     remainingLetters -= correctGuesses;
+    // вызов функции рисования, счетчик не правильных ответов.
     if (correctGuesses === 0) {
       drawMan(misses);
       misses++;
+      console.log("guess=", guess);
+      ctx.textBaseline = "top";
+      ctx.textAlign = "left";
+      ctx.fillStyle = "Black";
+      ctx.font = "25px Bold Courier";
+      ctx.fillText(guess, 10, 180 + misses * 25);
+      ctx.beginPath();
+      ctx.moveTo(10, 194 + misses * 25);
+      ctx.lineTo(25, 194 + misses * 25);
+      ctx.stroke();
     }
   }
 }

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Прыгающий мяч</title>
+  </head>
+  <body>
+    <canvas id="canvas" width="500" height="300"></canvas>
+    <script>
+      // Создаем конструктор ball.
+      var Ball = function () {
+        this.x = width / 2;
+        this.y = height / 2;
+        this.xSpeed = Math.random() * 10 - 5;
+        this.ySpeed = Math.random() * 10 - 5;
+        this.color = rndColor();
+      };
+
+      // функция рисования окружности по заданным координатам
+      var circle = function (x, y, radius, fillCircle) {
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+        if (fillCircle) {
+          ctx.fill();
+        } else {
+          ctx.stroke();
+        }
+      };
+      // Рисование мяча.
+      Ball.prototype.draw = function () {
+        ctx.fillStyle = this.color;
+        circle(this.x, this.y, 3, true);
+      };
+      // Движение мяча.
+      Ball.prototype.move = function () {
+        this.x += this.xSpeed;
+        this.y += this.ySpeed;
+      };
+      // Проверка на столкновение со стеной.
+      Ball.prototype.checkCollision = function () {
+        if (this.x < 0 || this.x > width) {
+          this.xSpeed = -this.xSpeed;
+        }
+        if (this.y < 0 || this.y > height) {
+          this.ySpeed = -this.ySpeed;
+        }
+      };
+      var canvas = document.getElementById("canvas");
+      var ctx = canvas.getContext("2d");
+      var colors = ["Red", "Orange", "Yellow", "Green", "Blue", "Purple"];
+      var width = canvas.width;
+      var height = canvas.height;
+
+      //Возвращаем случайно выбранный цвет.
+      var rndColor = function () {
+        return colors[Math.floor(Math.random() * colors.length)];
+      };
+
+      // создаем много мячей
+      var moreBalls = [];
+      for (var i = 0; i < 100; i++) {
+        moreBalls[i] = new Ball();
+      }
+
+      // Запускаем анимацию .
+      setInterval(function () {
+        ctx.clearRect(0, 0, width, height);
+
+        for (var i = 0; i < moreBalls.length; i++) {
+          moreBalls[i].draw();
+          moreBalls[i].move();
+          moreBalls[i].checkCollision();
+        }
+
+        ctx.strokeRect(0, 0, width, height);
+      }, 30);
+    </script>
+  </body>
+</html>
