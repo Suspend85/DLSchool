@@ -182,10 +182,8 @@
         var topCollision = head.row === 0;
         var rightCollision = head.col === widthInBlocks - 1;
         var bottomColiision = head.row === heightInBlocks - 1;
-
         var wallCollision =
           leftCollision || topCollision || rightCollision || bottomColiision;
-
         var selfCollision = false;
 
         for (var i = 0; i < this.segments.length; i++) {
@@ -193,7 +191,6 @@
             selfCollision = true;
           }
         }
-
         return wallCollision || selfCollision;
       };
 
@@ -208,7 +205,6 @@
         } else if (this.direction === "left" && newDirection === "right") {
           return;
         }
-
         this.nextDirection = newDirection;
       };
 
