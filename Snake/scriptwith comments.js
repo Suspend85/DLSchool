@@ -1,15 +1,46 @@
+/*Настроить «холст»
+  Установить счет игры в 0
+  Создать змейку
+  Создать яблоко
+  Каждые 100 миллисекунд {
+    Очистить «холст»
+    Напечатать текущий счет игры
+    Сдвинуть змейку в текущем направлении
+    Если змейка столкнулась со стеной или своим хвостом {
+      Закончить игру
+    } Иначе Если змейка съела яблоко {
+      Увеличить счет на 1
+      Переместить яблоко на новое место
+      Увеличить длину змейки
+    }
+    Для каждого сегмента тела змейки {
+      Нарисовать сегмент
+    }
+    Нарисовать яблоко
+    Нарисовать рамку
+  }
+  Когда игрок нажмет клавишу {
+    Если это клавиша-стрелка {
+      Обновить направление движения змейки
+    }
+  }
+  */
+
+// Настройка холста.
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
-
+// Получаем размеры элементы Canvas.
 var width = canvas.width;
 var height = canvas.height;
 
+// Вычисляем высоту и ширину в ячейках.
 var blockSize = 10;
 var widthInBlocks = width / blockSize;
 var heightInBlocks = height / blockSize;
-
+// Устанавливаем счет.
 var score = 0;
 
+// Ф-ия рисования окружности по заданным координатам, радиусу, заливке.
 var circle = function (x, y, radius, fillCircle) {
 	ctx.beginPath();
 	ctx.arc(x, y, radius, 0, Math.PI * 2, false);
@@ -20,6 +51,7 @@ var circle = function (x, y, radius, fillCircle) {
 	}
 };
 
+// Рисуем рамку.
 var drawBorder = function () {
 	ctx.fillStyle = 'Gray';
 	ctx.fillRect(0, 0, width, blockSize);
@@ -28,6 +60,7 @@ var drawBorder = function () {
 	ctx.fillRect(width - blockSize, 0, blockSize, height);
 };
 
+// Выводим счет игры в левом верхнем углу.
 var drawScore = function () {
 	ctx.textBaseline = 'top';
 	ctx.textAlign = 'left';
@@ -36,6 +69,7 @@ var drawScore = function () {
 	ctx.fillText('Счет: ' + score, blockSize, blockSize);
 };
 
+// Отменяем действие setInterval и сообщаем "Конец игры".
 var gameOver = function () {
 	clearInterval(intervalId);
 	ctx.font = '60px Courier';
@@ -45,12 +79,14 @@ var gameOver = function () {
 	ctx.fillText('Конец игры', width / 2, height / 2);
 };
 
+// Задаем конструктор Block (ячейка).
 var Block = function (col, row, color) {
 	this.col = col;
 	this.row = row;
 	this.color = color;
 };
 
+// Рисуем квадрат в позиции ячейки
 Block.prototype.drawSquare = function (color) {
 	var x = this.col * blockSize;
 	var y = this.row * blockSize;
@@ -58,6 +94,7 @@ Block.prototype.drawSquare = function (color) {
 	ctx.fillRect(x, y, blockSize, blockSize);
 };
 
+// Рисуем круг в позиции ячейки.
 Block.prototype.drawCircle = function (color) {
 	var centerX = this.col * blockSize + blockSize / 2;
 	var centerY = this.row * blockSize + blockSize / 2;
@@ -65,10 +102,12 @@ Block.prototype.drawCircle = function (color) {
 	circle(centerX, centerY, blockSize / 2, true);
 };
 
+// Проверяем, находится ли эта ячейка в той же позиции, что и ячейка otherBlock
 Block.prototype.equal = function (otherBlock) {
 	return this.col === otherBlock.col && this.row === otherBlock.row;
 };
 
+// Задаем конструктор Snake
 var Snake = function () {
 	this.segments = [new Block(7, 5, 'Green'), new Block(6, 5, 'Blue'), new Block(5, 5, 'yellow')];
 	this.direction = 'right';
@@ -76,18 +115,22 @@ var Snake = function () {
 };
 
 var snakeColor = ['Green', 'Blue', 'Yellow'];
+// Возвращает случайно выбранный цвет
 var pickColor = function () {
 	return snakeColor[Math.floor(Math.random() * snakeColor.length)];
 };
 
+// Рисуем квадратик для каждого сегмента тела змейки.
 Snake.prototype.draw = function () {
 	for (var i = 0; i < this.segments.length; i++) {
 		this.segments[i].drawSquare();
 	}
 };
 
+// Создаем новую голову и добавляем ее к началу змейки,
+// чтобы передвинуть змейку в текущем направлении
 Snake.prototype.move = function () {
-	ctx.fillStyle = 'green';
+	// ctx.fillStyle = 'green';
 	var head = this.segments[0];
 	var newHead;
 
